@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/login.css"/>
+</head>
+<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+<script type="text/javascript">
+    function check(){
+        var u=document.getElementById("username").value;
+        var p=document.getElementById("password").value;
+        var phone=document.getElementById("phone").value;
+        var sendobject={'username': u,'password':p,'phone':phone};
+        $.ajax({
+                        url: '/api/users/register',
+                        type: 'post',
+                        data: sendobject,
+                        dataType:"json",
+                        success: function (res) {
+                            if(res.result=='fail'){
+                                alert('该用户已存在,试试其他用户名吧！');
+                                window.location.reload();
+                            }else{
+                                alert('注册成功，赶快登录试试吧！');
+                                window.location='/';
+                            }
+                        }
+                    }
+            );
+    }
+</script>
+<body>
+<div id="register">
+    <h1>注册</h1>
+        <input type="text" required="required" placeholder="用户名" id="username">
+        <input type="password" required="required" placeholder="密码" id="password">
+        <input type="text" required="required" placeholder="手机号" id="phone">
+        <button class="but" onclick="return check()">注册</button>
+</div>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>投注</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/betting.css"/>
+</head>
+<!--以下为JavaScript代码，包含ajax请求-->
+<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+
+<body>
+<table width="936" border="0" cellspacing="0" cellpadding="0" align="center">
+    <tbody>
+    <tr valign="top" style="cursor:pointer;">
+        <td align="center" width="736" valign="middle">
+            <div style=" height:40px;  margin-top:4px; margin-bottom:4px;">
+                <div style=" height:40px;  width:423px">
+                    <div style="text-align:center; height:40px;line-height:45px;">
+                        距离第<span id="phase_new" style="font-weight: bold;">666</span>期
+    					<span id="RemainS">还有
+    						<span style="font-weight: bold;color:#ff0000;" id="phase_stop">219</span>秒停止竞猜，还有
+                            <span style="font-weight: bold;color:#ff0000;" id="phase_time">299</span>秒开奖
+    					</span>
+                    </div>
+                </div>
+            </div>
+        </td>
+        <td align="center" width="100" valign="middle" class="bordered" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="gb_times(0.1)">0.1倍</td>
+        <td align="center" width="100" valign="middle" class="bordered" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="gb_times(0.5)">0.5倍</td>
+        <td align="center" width="100" valign="middle" class="bordered" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="gb_times(1.5)">1.5倍</td>
+        <td align="center" width="100" valign="middle" class="bordered" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="gb_times(2)">2倍</td>
+        <td align="center" width="100" valign="middle" class="bordered" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="gb_times(100)">100倍</td>
+        <td align="center" width="100" valign="middle" class="bordered" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="">上期</td>
+        <td align="center" width="100" valign="middle" class="bordered" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="invert()">反选</td>
+        <td align="center" width="100" valign="middle" class="bordered" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="allIn()">梭哈</td>
+        <td align="center" width="200" valign="middle" class="bordered" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="makeDescision()">确认投注</td>
+    </tr>
+
+    </tbody>
+</table>
+<table width="924" align="center">
+    <tbody>
+    <tr style="cursor:pointer;" class="bordered">
+        <td width="51" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkBigEnd(0,27)">全包</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(2,1)">单</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(2,0)">双</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkBigEnd(14,27)">大</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkBigEnd(0,13)">小</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkBigEnd(10,17)">中</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkSingleEnd(1,0)">边</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkBigSingle(14,27,2,1)">大单</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkBigSingle(0,13,2,1)">小单</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkBigSingle(14,27,2,0)">大双</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkBigSingle(0,13,2,0)">小双</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkBigEnd(18,27)">大边</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkBigEnd(0,9)">小边</td>
+        <td width="46"  onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkSingleEnd(2,1)">单边</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkSingleEnd(2,0)">双边</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(10,0)">0尾</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(10,1)">1尾</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(10,2)">2尾</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(10,3)">3尾</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(10,4)">4尾</td>
+    </tr>
+    <tr style="cursor:pointer;" class="bordered">
+        <td height="23" width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="frog(0,4)">小尾</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(10,5)">5尾</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(10,6)">6尾</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(10,7)">7尾</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(10,8)">8尾</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(10,9)">9尾</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="frog(5,9)">大尾</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(3,0)">3余0</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(3,1)">3余1</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(3,2)">3余2</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(4,0)">4余0</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(4,1)">4余1</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(4,2)">4余2</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(4,3)">4余3</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(5,0)">5余0</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(5,1)">5余1</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(5,2)">5余2</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(5,3)">5余3</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="checkList(5,4)">5余4</td>
+        <td width="46" onmouseover="this.bgColor='pink'" onmouseout="this.bgColor='white'" onclick="clearAll()">清空</td>
+    </tr>
+    </tbody>
+</table>
+<table id="father_table">
+</table>
+<!-- 悬浮框 -->
+<div id="nav"><br>    
+    &nbsp;&nbsp;账号:&nbsp;&nbsp;<label id="account"></label><br>
+    &nbsp;&nbsp;金币:&nbsp;&nbsp;<label id="coin">0</label><br>
+    &nbsp;&nbsp;预投:&nbsp;&nbsp;<label id="preBet">0</label><br>
+    &nbsp;&nbsp;<label id="bet_1">001期投注：0</label><br>
+    &nbsp;&nbsp;<label id="bet_2">002期投注：0</label><br>
+    &nbsp;&nbsp;<label id="bet_3">003期投注：0</label>
+</div>
+</body>
+<script type="text/javascript">
+    window.onload= createTable;
+    function createTable() {        
+        lottery();
+        var cols=4;    //4列
+        var rows=14; //13行
+        var htmlstr="<table><tr><td>"
+        // table1
+        htmlstr+="<table class='bordered'>";
+        htmlstr+="<thead>"
+        htmlstr+="<tr>";
+        htmlstr+="<th>号码</th><th>请选择</th><th>投注</th><th>倍数</th>"
+        htmlstr+="</tr>";
+        htmlstr+="</thead>"
+        for(i=0;i<rows;i++){
+            htmlstr+="<tr>";
+            for(j=0;j<cols;j++){
+                switch (j) {
+                    case 0:
+                        htmlstr+="<td><img src='/images/number_"+i+".gif' width='25' height='25' align='absmiddle'></td>";
+                        break;
+                    case 1:
+                        htmlstr+="<td><input type='checkbox'id='cb_"+i+"' onclick='cb_Fn("+i+")'></td>";
+                        break;
+                    case 2:
+                        htmlstr+="<td><input id='tb_"+i+"' onkeyup='tb_Fn("+i+")'></input></td>";
+                        break;
+                    case 3:
+                        htmlstr+="<td><button onclick='btn_times("+i+",0.5)'>.5</button>&nbsp;<button onclick='btn_times("+i+",2)'>&nbsp;2</button>&nbsp;<button onclick='btn_times("+i+",10)'>10</button></td>";
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            htmlstr+="</tr>";
+        }
+        htmlstr+="</table>";
+        htmlstr+="</td><td>";
+        // table2
+        htmlstr+="<table class='bordered'>";
+        htmlstr+="<thead>"
+        htmlstr+="<tr>";
+        htmlstr+="<th>号码</th><th>请选择</th><th>投注</th><th>倍数</th>"
+        htmlstr+="</tr>";
+        htmlstr+="</thead>"
+        for(i=27;i>=14;i--){
+            htmlstr+="<tr>";
+            for(j=0;j<cols;j++){
+                switch (j) {
+                    case 0:
+                        htmlstr+="<td><img src='/images/number_"+i+".gif' width='25' height='25' align='absmiddle'></td>";
+                        break;
+                    case 1:
+                        htmlstr+="<td><input type='checkbox'id='cb_"+i+"' onclick='cb_Fn("+i+")'></td>";
+                        break;
+                    case 2:
+                        htmlstr+="<td><input id='tb_"+i+"' onkeyup='tb_Fn("+i+")'></input></td>";
+                        break;
+                    case 3:
+                        htmlstr+="<td><button onclick='btn_times("+i+",0.5)'>.5</button>&nbsp;<button onclick='btn_times("+i+",2)'>&nbsp;2</button>&nbsp;<button onclick='btn_times("+i+",10)'>10</button></td>";
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            htmlstr+="</tr>";
+        }
+        htmlstr+="</table>";
+
+        htmlstr+="</td></tr>"
+        htmlstr+="</table>";
+        document.getElementById('father_table').innerHTML +=htmlstr;
+    }
+    var results="";
+    function lottery() {
+        //取出cookie
+        var cookie_pos=document.cookie.indexOf('username')+9;
+        var cookie_end=document.cookie.indexOf(';', cookie_pos);
+        var cookie_username=document.cookie.substring(cookie_pos, cookie_end);
+        var cookie_p=document.cookie.indexOf('password')+9;
+        var cookie_password=document.cookie.substring(cookie_p, cookie_p+32);
+        document.getElementById('account').innerHTML=cookie_username;
+        $.ajax({
+                    url: '/api/business/pull',
+                    type: 'post',
+                    data:{'username':cookie_username,'password':cookie_password},
+                    dataType:"json",
+                    async: false,
+                    success: function(res) {
+                        document.getElementById('phase_new').innerHTML=res.history[0].phase+1;
+                        results=res;
+                    }
+                }
+        );
+        $.ajax({
+                    url: '/api/business/getUserInfo',
+                    type: 'post',
+                    data:{'username':cookie_username,'password':cookie_password},
+                    dataType:"json",
+                    async: false,
+                    success: function(res) {
+                        document.getElementById('coin').innerHTML=res.info.cash;
+                    }
+                }
+        );        
+        return results;
+    }
+    
+
+    //倒计时模块
+    var startSecond=lottery().time;
+    var stopSencond=startSecond-80;
+    function GetRTime(ctime)
+    {
+        var nS=ctime;
+        if(nS>0){
+            nS = nS-1;
+            stopSencond=stopSencond-1;
+            if(stopSencond<0){
+                document.getElementById("RemainS").innerHTML="已经停止竞猜，还有<strong style='color:#ff0000;'>"+nS+"</strong>秒开奖 ";
+            }else{
+                document.getElementById("RemainS").innerHTML="还有<strong style='color:#ff0000;'>"+stopSencond+"</strong>秒停止竞猜，<strong style='color:#ff0000;'>"+nS+"</strong>秒开奖 ";
+            }
+        }else{
+            window.location.reload();
+        }
+        setTimeout("GetRTime("+nS+")",1000);
+    }
+    //剩余秒数，预计：从服务器获得
+    GetRTime(startSecond);
+</script>
+<script type="text/javascript" src='/javascripts/betting.js'>
+    
+</script>
+</html>

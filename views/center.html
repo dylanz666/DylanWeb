@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>游戏中心</title>
+</head>
+<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+<script type="text/javascript">
+    //游戏1
+    function checkForFirstGame(){
+        //取出cookie
+        var cookie_pos=document.cookie.indexOf('username')+9;
+        var cookie_end=document.cookie.indexOf(';', cookie_pos);
+        var cookie_username=document.cookie.substring(cookie_pos, cookie_end);
+        var cookie_p=document.cookie.indexOf('password')+9;
+        var cookie_password=document.cookie.substring(cookie_p, cookie_p+32);
+        $.ajax({
+                    url: '/api/users/firstGame',
+                    type: 'post',
+                    data: {'username': cookie_username,'password':cookie_password},
+                    dataType:"json",
+                    success: function (res) {
+                        if(res.result=='fail'){
+                            alert('验证失败，请重新登录！');
+                        }
+                    }
+                });
+    }
+    //游戏2
+    function checkForSecondGame(){
+        //取出cookie
+        var cookie_pos=document.cookie.indexOf('username')+9;
+        var cookie_end=document.cookie.indexOf(';', cookie_pos);
+        var cookie_username=document.cookie.substring(cookie_pos, cookie_end);
+        var cookie_p=document.cookie.indexOf('password')+9;
+        var cookie_password=document.cookie.substring(cookie_p, cookie_p+32);
+        $.ajax({
+                    url: '/api/users/secondGame',
+                    type: 'post',
+                    data: {'username': cookie_username,'password':cookie_password},
+                    dataType:"json",
+                    success: function (res) {
+                        if(res.result=='fail'){
+                            alert('验证失败，请重新登录！');
+                        }
+                    }
+                }
+        );
+    }
+</script>
+<body>
+<div style="margin:0 auto;width:200px;">
+    <form action="/api/users/firstGame" method="post">
+        <button onclick="checkForFirstGame()" style="width:200px;height: 100px; margin:0 auto;">游戏1</button>   
+    </form><br>
+    <form action="/api/users/secondGame" method="post">
+        <button onclick="checkForSecondGame()" style="width:200px;height: 100px; margin:0 auto;">游戏2(完善中...)</button>    
+    </form>
+</div>
+</body>
+</html>

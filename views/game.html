@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>幸运28</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/main.css"/>
+</head>
+<body>
+<table width="936" border="0" cellspacing="0" cellpadding="0" align="center">
+    <tbody>
+    <tr valign="top">
+        <td align="center" height="30" width="736" valign="middle">
+            <div class="xy2820131227" style=" height:90px;  margin-top:8px; margin-bottom:8px;">
+                <div class="xy2820131227_l" style=" height:90px;  width:623px">
+                    <div style="  text-align:center; height:50px;line-height:60px;">
+                        第<span id="phase_new" style="font-weight: bold;">666</span>期
+    					<span id="RemainS">还有
+    						<span style="font-weight: bold;color:#ff0000;">219</span>秒停止竞猜，
+                            <span style="font-weight: bold;color:#ff0000;">299</span>秒开奖
+    					</span>    					
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button onclick="window.open('recharge')">充值</button>
+                        <div style="text-align:center; height:40px; line-height:30px;">
+                            幸运28第<span style="color:#ff0000;font-weight: bold;" id="phase_past">814534</span>期开奖结果：
+                                <span id="details"></span> <img src='/images/number_0.gif' width="25" height="25" align="absmiddle" id='img_sum'>&nbsp;&nbsp;&nbsp;[用户：<span id="username"></span>]&nbsp;&nbsp;[金币：<span id="totalCoin"></span>]
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>        
+    </tr>
+    </tbody>
+</table>
+<table class="bordered" id="history_result">
+    <thead>
+    <tr>
+        <th>期号</th>
+        <th>开奖时间</th>
+        <th>开奖结果</th>
+        <th>投注情况</th>
+    </tr>
+    </thead>
+    <tr>
+        <td>最新</td>
+        <td>...</td>
+        <td>...</td>
+        <td id="tou_1"></td>
+    </tr>
+    <tr>
+        <td>最新</td>
+        <td>...</td>
+        <td>...</td>
+        <td id="tou_2"></td>
+    </tr>
+    <tr>
+        <td>最新</td>
+        <td>...</td>
+        <td>...</td>
+        <td id="tou_3"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>0/0</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>0/0</td>
+    </tr>
+    <tr>
+
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>0/0</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>0/0</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>0/0</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>0/0</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>0/0</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>0/0</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>0/0</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>0/0</td>
+    </tr>
+</table>
+</body>
+
+
+<!--以下为JavaScript代码，包含ajax请求-->
+<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+<script language="JavaScript">
+    //window.onload=lottery;
+
+    var results="";
+    var betResult="";
+    function lottery() {
+        //取出cookie
+        var cookie_pos=document.cookie.indexOf('username')+9;
+        var cookie_end=document.cookie.indexOf(';', cookie_pos);
+        var cookie_username=document.cookie.substring(cookie_pos, cookie_end);
+        var cookie_p=document.cookie.indexOf('password')+9;
+        var cookie_password=document.cookie.substring(cookie_p, cookie_p+32);
+        document.getElementById('username').innerHTML=cookie_username;
+        $.ajax({
+                url: '/api/business/pull',
+                type: 'post',
+                data:{'username':cookie_username,'password':cookie_password},
+                dataType:"json",
+                async: false,
+                success: function(res) {
+                    var sRes=res.history[0];
+                    document.getElementById('phase_past').innerHTML=sRes.phase;
+                    document.getElementById('phase_new').innerHTML=sRes.phase+1;
+                    document.getElementById('details').innerHTML=sRes.details;
+                    document.getElementById('img_sum').src='/images/number_'+sRes.result+'.gif';
+                    results=res;
+                }
+            }
+        );
+        //触发派奖
+        $.ajax({
+            url: '/api/business/getPayBack',
+            type: 'post',
+            data:{'username':cookie_username,'password':cookie_password},
+            dataType:"json",
+            async: false,
+            success: function(res) {
+            }
+        })
+        //获取用户投注的请求
+        $.ajax({
+            url: '/api/business/getBetResult',
+            data:{'username': cookie_username,'password':cookie_password},
+            type: 'post',
+            async: false,
+            success: function(betRes) {
+                betResult=betRes;
+                document.getElementById('totalCoin').innerHTML=betRes.totalCoin;
+
+            }
+        });
+        //前端显示逻辑
+        //前端显示逻辑---根据服务器返回的数据，显示到前端
+        var table_result=document.getElementById('history_result');
+        for (var i = 1; i < 14; i++) {
+            if(i<4){
+                table_result.rows[i].cells[0].innerText=results.history[0].phase+4-i;
+            }else{
+                table_result.rows[i].cells[0].innerText=results.history[i-4].phase;
+                //时间转换并显示
+                var sStamp=new Date(results.history[i-4].timestamp);
+                var mon=sStamp.getMonth()+1;
+                var minutes=sStamp.getMinutes();
+                if(minutes<10){//如果分钟小于10，则补0
+                    minutes="0"+minutes;
+                }
+                //拼接并显示时间戳
+                var sStampFull=sStamp.getFullYear()+"-"+mon+"-"+sStamp.getDate()+" "+sStamp.getHours()+":"+minutes;
+                table_result.rows[i].cells[1].innerText=sStampFull;
+                //取出开奖的结果和，作为图片的文件名的一部分；
+                var img_number=results.history[i-4].result;
+                //拼接出单元格内字符串+img对象的代码，然后相应单元格的innerHTML=该代码
+                var img_code=results.history[i-4].details+" "+"<img src='/images/number_"+img_number+".gif' width='25' height='25' align='absmiddle'>";
+                table_result.rows[i].cells[2].innerHTML=img_code;
+                //投注情况显示逻辑
+                var len=betResult.bets.length;
+                var p=results.history[i-4].phase;
+                for (var j = 0; j < len; j++) {
+                    if(p==betResult.bets[j].phase){
+                        table_result.rows[i].cells[3].innerHTML=betResult.bets[j].bet+"/"+betResult.bets[j].profit;
+                    }
+                }
+            };
+        };
+        //投注情况显示逻辑,第1到第3行
+        var p3=results.history[0].phase+1;
+        var p2=results.history[0].phase+2;
+        var p1=results.history[0].phase+3;
+        for (var j = 0; j < len; j++) {
+            if(p1==betResult.bets[j].phase){
+                table_result.rows[1].cells[3].innerHTML=betResult.bets[j].bet+"/"+betResult.bets[j].profit;
+            }
+            if(p2==betResult.bets[j].phase){
+                table_result.rows[2].cells[3].innerHTML=betResult.bets[j].bet+"/"+betResult.bets[j].profit;
+            }
+            if(p3==betResult.bets[j].phase){
+                table_result.rows[3].cells[3].innerHTML=betResult.bets[j].bet+"/"+betResult.bets[j].profit;
+            }
+        }
+        document.getElementById('tou_1').innerHTML="<a href=\'/api/business/BettingHome/"+p1+"\' target=\'_blank\'>投注</a>";
+        document.getElementById('tou_2').innerHTML="<a href=\'/api/business/BettingHome/"+p2+"\' target=\'_blank\'>投注</a>";
+        document.getElementById('tou_3').innerHTML="<a href=\'/api/business/BettingHome/"+p3+"\' target=\'_blank\'>投注</a>";
+        return results;
+    }
+
+    var startSecond=lottery().time;
+    var stopSencond=startSecond-80;
+    var isReload=2;
+    function GetRTime(ctime)
+    {
+        var nS=ctime;
+        if(nS>0){
+            nS = nS-1;
+            stopSencond=stopSencond-1;
+            if(stopSencond<0){
+                document.getElementById("RemainS").innerHTML="已经停止竞猜，还有<strong style='color:#ff0000;'>"+nS+"</strong>秒开奖 ";
+                document.getElementById("tou_3").innerHTML="开奖中...";
+            }else{
+                document.getElementById("RemainS").innerHTML="还有<strong style='color:#ff0000;'>"+stopSencond+"</strong>秒停止竞猜，<strong style='color:#ff0000;'>"+nS+"</strong>秒开奖 ";
+            }
+            //document.getElementById("phase_new").innerHTML=lottery().phase+1;
+        }else{
+            document.getElementById("RemainS").innerHTML= "正在开奖中请等待！";
+            window.location.reload();
+
+            //nS =300;
+            //lottery();
+        }
+        setTimeout("GetRTime("+nS+")",1000);
+    }
+    //剩余秒数，预计：从服务器获得
+    GetRTime(startSecond);
+
+    function getBettingHome() {
+        $.ajax({
+            url: '/api/business/BettingHome',
+            //data:{'username': cookie_username},
+            type: 'get',
+            async: false,
+            success: function (betRes) {
+            }
+        })
+    }
+</script>
+</html>
